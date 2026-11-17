@@ -1,0 +1,1074 @@
+<!doctype html>
+<html lang="es" data-type="software">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="page-type" content="software">
+  <meta name="site-kind" content="software">
+  <meta name="description" content="Aplicación de estudio interactiva para Transformaciones en el mundo contemporáneo, Módulo 11.">
+  <title>Módulo 11 · Transformaciones en el mundo contemporáneo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      color-scheme: light;
+      --paper: #f3f1e9;
+      --paper-deep: #e8e5da;
+      --ink: #1d2924;
+      --muted: #64716a;
+      --forest: #173d32;
+      --forest-light: #245344;
+      --lime: #d7ed7b;
+      --coral: #e87859;
+      --line: #d8d6ca;
+      --white: #fffefa;
+      --good: #176b48;
+      --good-bg: #e5f4e9;
+      --bad: #a63d33;
+      --bad-bg: #fff0ec;
+      --shadow: 0 16px 42px rgba(31, 48, 39, .09);
+      --display: "Aptos Display", "Trebuchet MS", sans-serif;
+      --body: "Aptos", "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--body);
+      font-size: 16px;
+      line-height: 1.55;
+    }
+    button, input, select { font: inherit; }
+    button { cursor: pointer; }
+    button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible {
+      outline: 3px solid var(--coral);
+      outline-offset: 3px;
+    }
+    [hidden] { display: none !important; }
+
+    .topbar {
+      position: sticky;
+      z-index: 20;
+      top: 0;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 76px;
+      padding: 12px clamp(18px, 5vw, 72px);
+      color: #f8f7ed;
+      background: var(--forest);
+      box-shadow: 0 5px 22px rgba(13, 34, 26, .12);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: max-content;
+      color: inherit;
+      text-decoration: none;
+    }
+    .brand-mark {
+      display: grid;
+      width: 38px;
+      height: 38px;
+      place-items: center;
+      border: 1px solid rgba(255,255,255,.35);
+      border-radius: 12px 12px 12px 3px;
+      color: var(--forest);
+      background: var(--lime);
+      font-family: var(--display);
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: -.06em;
+    }
+    .brand-name { font-family: var(--display); font-size: 15px; font-weight: 800; letter-spacing: .01em; }
+    .brand-sub { color: #bbcbc2; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; }
+    .nav {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .nav button {
+      padding: 10px 13px;
+      border: 0;
+      border-radius: 999px;
+      color: #d3ded7;
+      background: transparent;
+      font-size: 13px;
+      font-weight: 700;
+      transition: background .18s ease, color .18s ease, transform .18s ease;
+    }
+    .nav button:hover { color: white; background: rgba(255,255,255,.11); transform: translateY(-1px); }
+    .nav button[aria-current="page"] { color: var(--forest); background: var(--lime); }
+    .nav button.exam-nav { border: 1px solid rgba(215,237,123,.65); color: var(--lime); }
+    .nav button.exam-nav:hover { color: var(--forest); background: var(--lime); }
+    .nav button.exam-nav[aria-current="page"] { color: var(--forest); background: var(--lime); }
+
+    main { min-height: calc(100vh - 76px); }
+    .page { width: min(1120px, calc(100% - 40px)); margin: 0 auto; padding: 54px 0 90px; }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      color: var(--forest-light);
+      font-size: 11px;
+      font-weight: 850;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+    .eyebrow::before { width: 21px; height: 2px; content: ""; background: var(--coral); }
+    h1, h2, h3, p { margin-top: 0; }
+    h1, h2, h3 { font-family: var(--display); }
+    h1 {
+      max-width: 760px;
+      margin: 17px 0 22px;
+      font-size: clamp(42px, 6.4vw, 78px);
+      font-weight: 850;
+      letter-spacing: -.065em;
+      line-height: .98;
+    }
+    h2 { margin-bottom: 12px; font-size: clamp(30px, 4vw, 46px); letter-spacing: -.05em; line-height: 1.05; }
+    h3 { margin-bottom: 8px; font-size: 20px; letter-spacing: -.025em; }
+    .lead { max-width: 630px; color: var(--muted); font-size: clamp(17px, 2vw, 20px); }
+    .hero {
+      position: relative;
+      overflow: hidden;
+      display: grid;
+      min-height: 515px;
+      grid-template-columns: minmax(0, 1.25fr) minmax(260px, .75fr);
+      align-items: center;
+      gap: 35px;
+      padding: clamp(28px, 6vw, 75px);
+      border-radius: 8px 46px 8px 46px;
+      color: #f7f6ec;
+      background: var(--forest);
+      box-shadow: var(--shadow);
+      animation: enter .55s both ease-out;
+    }
+    .hero::before, .hero::after {
+      position: absolute;
+      pointer-events: none;
+      content: "";
+    }
+    .hero::before {
+      top: -125px;
+      right: -100px;
+      width: 430px;
+      height: 430px;
+      border: 1px solid rgba(215,237,123,.25);
+      border-radius: 50%;
+      box-shadow: 0 0 0 30px rgba(215,237,123,.035), 0 0 0 70px rgba(215,237,123,.025);
+    }
+    .hero::after {
+      right: 12%;
+      bottom: 8%;
+      width: 90px;
+      height: 90px;
+      border: 1px solid rgba(232,120,89,.55);
+      border-radius: 50%;
+    }
+    .hero-copy, .hero-aside { position: relative; z-index: 1; }
+    .hero .eyebrow { color: var(--lime); }
+    .hero h1 { max-width: 720px; }
+    .hero .lead { max-width: 590px; color: #d0dbd3; }
+    .hero-aside {
+      display: flex;
+      min-height: 270px;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 24px;
+      border: 1px solid rgba(255,255,255,.2);
+      border-radius: 4px 28px 4px 28px;
+      background: rgba(255,255,255,.06);
+      backdrop-filter: blur(7px);
+    }
+    .aside-number { color: var(--lime); font-family: var(--display); font-size: clamp(70px, 10vw, 112px); font-weight: 850; letter-spacing: -.09em; line-height: .85; }
+    .aside-label { max-width: 170px; color: #d8e1da; font-size: 14px; }
+    .aside-rule { width: 100%; height: 1px; background: rgba(255,255,255,.25); }
+    .hero .eyebrow::before { background: var(--coral); }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 11px; margin-top: 30px; }
+    .button {
+      display: inline-flex;
+      min-height: 48px;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px 18px;
+      border: 1px solid transparent;
+      border-radius: 999px;
+      font-size: 14px;
+      font-weight: 800;
+      text-decoration: none;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+    .button:hover { transform: translateY(-2px); box-shadow: 0 8px 18px rgba(16, 31, 24, .12); }
+    .button:active { transform: translateY(0); }
+    .button-primary { color: var(--forest); background: var(--lime); }
+    .button-secondary { border-color: rgba(255,255,255,.34); color: white; background: transparent; }
+    .button-dark { color: white; background: var(--forest); }
+    .button-outline { border-color: var(--line); color: var(--ink); background: transparent; }
+    .arrow { font-size: 18px; line-height: 1; }
+
+    .unit-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      margin-top: 20px;
+      border: 1px solid var(--line);
+      border-radius: 5px 22px 5px 22px;
+      background: rgba(255,254,250,.62);
+    }
+    .unit-chip { padding: 19px 21px; border-right: 1px solid var(--line); }
+    .unit-chip:last-child { border-right: 0; }
+    .unit-chip strong { display: block; margin-bottom: 5px; color: var(--forest); font-family: var(--display); font-size: 14px; }
+    .unit-chip span { color: var(--muted); font-size: 12px; }
+    .home-note { display: flex; align-items: flex-start; gap: 14px; max-width: 760px; margin: 34px 0 0; color: var(--muted); font-size: 14px; }
+    .note-mark { display: grid; width: 27px; height: 27px; flex: 0 0 auto; place-items: center; border-radius: 50%; color: var(--forest); background: #e2e8cc; font-weight: 900; }
+
+    .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 24px; margin-bottom: 27px; }
+    .section-heading .lead { margin-bottom: 0; font-size: 16px; }
+    .count-badge { flex: 0 0 auto; padding: 8px 13px; border-radius: 999px; color: var(--forest); background: #e3e9d2; font-size: 12px; font-weight: 800; }
+    .toolbar { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 22px; }
+    .field {
+      min-height: 45px;
+      padding: 10px 14px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      color: var(--ink);
+      background: var(--white);
+    }
+    .search-field { min-width: min(100%, 300px); flex: 1; }
+    .unit-select { min-width: 195px; }
+    .topic-label { color: var(--muted); font-size: 12px; font-weight: 750; }
+    .unit-section { margin: 32px 0 40px; }
+    .unit-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin: 0 0 13px;
+      color: var(--forest);
+      font-family: var(--display);
+      font-size: 22px;
+      letter-spacing: -.035em;
+    }
+    .unit-title span { display: inline-grid; width: 34px; height: 34px; place-items: center; border-radius: 50%; color: var(--forest); background: var(--lime); font-size: 13px; }
+    .topic-group { margin: 20px 0; }
+    .topic-heading { margin: 0 0 10px; color: #727d73; font-size: 11px; font-weight: 850; letter-spacing: .12em; text-transform: uppercase; }
+    .concept-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+    .concept-card {
+      display: grid;
+      grid-template-columns: 39px minmax(0, 1fr);
+      gap: 12px;
+      padding: 17px 18px;
+      border: 1px solid var(--line);
+      border-radius: 4px 18px 4px 18px;
+      background: var(--white);
+      transition: border-color .2s ease, transform .2s ease, box-shadow .2s ease;
+    }
+    .concept-card:hover { transform: translateY(-2px); border-color: #b2bda5; box-shadow: 0 9px 22px rgba(31,48,39,.07); }
+    .concept-index { display: grid; width: 32px; height: 32px; place-items: center; border-radius: 50%; color: var(--forest); background: #e9eddc; font-size: 11px; font-weight: 850; }
+    .concept-name { margin: 0 0 5px; font-family: var(--display); font-size: 16px; font-weight: 850; line-height: 1.25; }
+    .concept-definition { margin: 0; color: #56645c; font-size: 14px; line-height: 1.5; }
+    .empty-state { padding: 32px; border: 1px dashed #bac2b4; border-radius: 12px; color: var(--muted); text-align: center; }
+
+    .question-list { display: grid; gap: 11px; }
+    .question-card {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 4px 20px 4px 20px;
+      background: var(--white);
+      box-shadow: 0 5px 16px rgba(31,48,39,.035);
+    }
+    .question-top { display: flex; align-items: flex-start; gap: 14px; padding: 19px 21px 14px; }
+    .question-number { display: grid; width: 32px; height: 32px; flex: 0 0 auto; place-items: center; border-radius: 50%; color: white; background: var(--forest); font-size: 11px; font-weight: 850; }
+    .question-text { margin: 2px 0 0; font-family: var(--display); font-size: 17px; font-weight: 760; line-height: 1.4; }
+    .answer-toggle { margin: 0 20px 18px 67px; padding: 8px 12px; border: 1px solid #c9d2c4; border-radius: 999px; color: var(--forest); background: #f4f6ed; font-size: 12px; font-weight: 800; }
+    .answer-toggle:hover { border-color: var(--forest); }
+    .answer-copy { margin: 0 20px 19px 67px; padding: 15px 17px; border-left: 3px solid var(--lime); border-radius: 0 10px 10px 0; color: #43534a; background: #f3f5eb; font-size: 14px; animation: reveal .25s ease-out; }
+    .filter-summary { margin: 0 0 18px; color: var(--muted); font-size: 13px; }
+
+    .exam-shell { max-width: 850px; margin: 0 auto; }
+    .exam-header { display: flex; justify-content: space-between; gap: 18px; margin-bottom: 22px; }
+    .exam-kicker { color: var(--forest-light); font-size: 11px; font-weight: 850; letter-spacing: .14em; text-transform: uppercase; }
+    .exam-heading { margin: 8px 0; font-size: clamp(34px, 4.8vw, 55px); }
+    .progress-copy { color: var(--muted); font-size: 13px; }
+    .progress-track { overflow: hidden; height: 7px; margin: 20px 0 16px; border-radius: 99px; background: #dddcd2; }
+    .progress-fill { width: 0; height: 100%; border-radius: inherit; background: var(--forest-light); transition: width .25s ease; }
+    .question-dots { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 23px; }
+    .question-dot { width: 25px; height: 25px; padding: 0; border: 1px solid #c7c9bd; border-radius: 50%; color: #66726a; background: transparent; font-size: 10px; font-weight: 800; }
+    .question-dot[aria-current="step"] { border-color: var(--forest); color: white; background: var(--forest); }
+    .question-dot.is-answered { border-color: #a4b797; color: var(--forest); background: #e3ead7; }
+    .question-dot.is-current-answered { border-color: var(--forest); color: white; background: var(--forest-light); }
+    .exam-card { padding: clamp(21px, 4vw, 36px); border: 1px solid var(--line); border-radius: 5px 27px 5px 27px; background: var(--white); box-shadow: var(--shadow); }
+    .exam-card-meta { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; margin-bottom: 22px; }
+    .exam-unit, .exam-topic { color: var(--muted); font-size: 11px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
+    .exam-topic { padding: 5px 10px; border-radius: 99px; background: #eff1e8; }
+    .exam-prompt { margin: 0 0 23px; font-family: var(--display); font-size: clamp(19px, 2.5vw, 25px); font-weight: 750; letter-spacing: -.025em; line-height: 1.4; }
+    .option-list { display: grid; gap: 9px; }
+    .option {
+      display: flex;
+      width: 100%;
+      min-height: 55px;
+      align-items: center;
+      gap: 13px;
+      padding: 12px 15px;
+      border: 1px solid #d5d8ce;
+      border-radius: 12px;
+      color: var(--ink);
+      background: white;
+      text-align: left;
+      transition: border-color .16s ease, background .16s ease, transform .16s ease;
+    }
+    .option:hover:not(:disabled) { transform: translateX(3px); border-color: var(--forest-light); background: #f6f7f1; }
+    .option:disabled { cursor: default; }
+    .option-letter { display: grid; width: 29px; height: 29px; flex: 0 0 auto; place-items: center; border: 1px solid #d6dbd0; border-radius: 50%; color: #66736b; font-size: 11px; font-weight: 850; }
+    .option-copy { flex: 1; font-size: 14px; font-weight: 650; }
+    .option-mark { display: none; font-size: 18px; font-weight: 900; }
+    .option.is-correct { border-color: #83b294; color: #15583e; background: var(--good-bg); }
+    .option.is-correct .option-letter { border-color: #72a488; color: white; background: var(--good); }
+    .option.is-wrong { border-color: #e2a095; color: #8d3029; background: var(--bad-bg); }
+    .option.is-wrong .option-letter { border-color: var(--bad); color: white; background: var(--bad); }
+    .option.is-correct .option-mark, .option.is-wrong .option-mark { display: block; }
+    .answer-feedback { min-height: 43px; margin-top: 16px; padding: 11px 14px; border-radius: 10px; color: var(--muted); background: #f2f2eb; font-size: 13px; }
+    .answer-feedback.good { color: var(--good); background: var(--good-bg); }
+    .answer-feedback.bad { color: var(--bad); background: var(--bad-bg); }
+    .exam-controls { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 21px; }
+    .exam-controls .button { min-width: 125px; }
+    .exam-footnote { margin: 18px 0 0; color: var(--muted); font-size: 12px; }
+    .results-card { padding: clamp(28px, 5vw, 48px); border-radius: 8px 34px 8px 34px; color: #f8f7ed; background: var(--forest); }
+    .result-number { margin: 12px 0 6px; color: var(--lime); font-family: var(--display); font-size: clamp(70px, 12vw, 120px); font-weight: 850; letter-spacing: -.085em; line-height: 1; }
+    .result-grade { margin-bottom: 20px; color: #d2ded5; font-size: 18px; }
+    .result-note { max-width: 630px; color: #d3ddd6; }
+    .mistakes { margin-top: 24px; }
+    .mistake-item { margin-top: 9px; padding: 15px 17px; border: 1px solid var(--line); border-radius: 12px; background: var(--white); }
+    .mistake-item strong { display: block; margin-bottom: 4px; color: var(--forest); }
+    .mistake-item span { color: var(--muted); font-size: 13px; }
+    .result-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 25px; }
+    .result-actions .button-secondary { border-color: rgba(255,255,255,.4); }
+    .footer { padding: 18px 20px 28px; color: #778078; font-size: 12px; text-align: center; }
+    .toast { position: fixed; z-index: 40; right: 20px; bottom: 20px; max-width: min(420px, calc(100vw - 40px)); padding: 13px 17px; border-radius: 12px; color: white; background: var(--forest); box-shadow: var(--shadow); font-size: 13px; }
+    @keyframes enter { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes reveal { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+
+    @media (max-width: 820px) {
+      .topbar { flex-wrap: wrap; gap: 12px; padding: 12px 20px; }
+      .nav { width: 100%; justify-content: space-between; gap: 2px; }
+      .nav button { padding: 9px 10px; font-size: 12px; }
+      .hero { min-height: auto; grid-template-columns: 1fr; }
+      .hero-aside { min-height: 160px; }
+      .aside-number { font-size: 72px; }
+      .unit-strip { grid-template-columns: repeat(2, 1fr); }
+      .unit-chip:nth-child(2) { border-right: 0; }
+      .unit-chip:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+    }
+    @media (max-width: 560px) {
+      .topbar { padding: 11px 14px; }
+      .brand-name { font-size: 13px; }
+      .brand-sub { font-size: 10px; }
+      .nav button { padding: 8px 7px; font-size: 11px; }
+      .page { width: min(100% - 28px, 1120px); padding-top: 30px; }
+      .hero { gap: 24px; padding: 27px 22px; border-radius: 5px 30px 5px 30px; }
+      .hero-aside { min-height: 130px; }
+      .unit-strip { margin-top: 12px; }
+      .unit-chip { padding: 14px 13px; }
+      .section-heading { align-items: flex-start; flex-direction: column; gap: 12px; }
+      .concept-grid { grid-template-columns: 1fr; }
+      .toolbar { flex-direction: column; }
+      .field, .unit-select { width: 100%; }
+      .question-top { padding: 15px 15px 11px; }
+      .answer-toggle { margin-left: 61px; }
+      .answer-copy { margin-left: 61px; }
+      .exam-header { flex-direction: column; }
+      .exam-card { padding: 19px 15px; }
+      .exam-controls { flex-wrap: wrap; }
+      .exam-controls .button { flex: 1; min-width: 115px; }
+      .exam-controls .button:last-child { order: 2; }
+      .question-dots { gap: 5px; }
+      .question-dot { width: 24px; height: 24px; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+    }
+  </style>
+</head>
+<body class="min-h-screen antialiased">
+  <header class="topbar">
+    <a class="brand" href="#inicio" aria-label="MEVAPREPA, ir al inicio">
+      <span class="brand-mark" aria-hidden="true">M11</span>
+      <span><span class="brand-name">MEVAPREPA</span><br><span class="brand-sub">Guía interactiva · Módulo 11</span></span>
+    </a>
+    <nav class="nav" aria-label="Navegación principal">
+      <button type="button" data-route="conceptos">Conceptos</button>
+      <button type="button" data-route="cuestionario">Cuestionario</button>
+      <button type="button" class="exam-nav" data-route="examen">Examen diagnóstico</button>
+    </nav>
+  </header>
+
+  <main class="min-h-screen">
+    <section class="page" id="view-inicio" data-view="inicio">
+      <div class="hero">
+        <div class="hero-copy">
+          <span class="eyebrow">Módulo 11 · Historia contemporánea</span>
+          <h1>Transformaciones en el mundo contemporáneo</h1>
+          <p class="lead">Una guía para conectar cambios políticos, avances tecnológicos, economía global y conflictos actuales. Estudia a tu ritmo y comprueba lo que sabes.</p>
+          <div class="hero-actions">
+            <button type="button" class="button button-primary" data-route="examen">Examen diagnóstico <span class="arrow" aria-hidden="true">→</span></button>
+            <button type="button" class="button button-secondary" data-route="conceptos">Explorar conceptos</button>
+          </div>
+        </div>
+        <aside class="hero-aside" aria-label="Contenido del módulo">
+          <div class="aside-number" id="hero-concept-count">76</div>
+          <div class="aside-rule"></div>
+          <div class="aside-label">conceptos clave repartidos en cuatro unidades de estudio</div>
+        </aside>
+      </div>
+      <div class="unit-strip" aria-label="Unidades del módulo">
+        <div class="unit-chip"><strong>01 · Cambios políticos</strong><span>Guerras, revoluciones y transiciones</span></div>
+        <div class="unit-chip"><strong>02 · Ciencia y cultura</strong><span>Tecnología, medios y movimientos sociales</span></div>
+        <div class="unit-chip"><strong>03 · Economía global</strong><span>Mercados, crisis y migración</span></div>
+        <div class="unit-chip"><strong>04 · Geopolítica</strong><span>Potencias y conflictos del siglo XXI</span></div>
+      </div>
+      <p class="home-note"><span class="note-mark" aria-hidden="true">i</span><span>El examen selecciona 30 conceptos distintos al azar. Cada reactivo ofrece cuatro opciones del mismo subtema y cambia de redacción y posición de respuesta para que practiques sin seguir un patrón.</span></p>
+    </section>
+
+    <section class="page" id="view-conceptos" data-view="conceptos" hidden>
+      <div class="section-heading">
+        <div><span class="eyebrow">Biblioteca de estudio</span><h2>Conceptos clave</h2><p class="lead">Recorre las ideas centrales del módulo, organizadas por unidad y subtema.</p></div>
+        <span class="count-badge" id="concept-count">76 conceptos</span>
+      </div>
+      <div class="toolbar">
+        <input id="concept-search" class="field search-field" type="search" placeholder="Buscar un concepto o una idea…" aria-label="Buscar conceptos">
+        <select id="concept-unit" class="field unit-select" aria-label="Filtrar por unidad">
+          <option value="all">Todas las unidades</option>
+        </select>
+      </div>
+      <div id="concepts-list" aria-live="polite"></div>
+    </section>
+
+    <section class="page" id="view-cuestionario" data-view="cuestionario" hidden>
+      <div class="section-heading">
+        <div><span class="eyebrow">Práctica de recuperación</span><h2>Cuestionario</h2><p class="lead">Intenta responder cada pregunta antes de revelar la explicación.</p></div>
+        <span class="count-badge" id="question-count">76 preguntas</span>
+      </div>
+      <div class="toolbar">
+        <input id="question-search" class="field search-field" type="search" placeholder="Buscar en preguntas y respuestas…" aria-label="Buscar preguntas">
+        <select id="question-unit" class="field unit-select" aria-label="Filtrar por unidad">
+          <option value="all">Todas las unidades</option>
+        </select>
+      </div>
+      <div id="question-summary" class="filter-summary" aria-live="polite"></div>
+      <div id="questions-list" class="question-list"></div>
+    </section>
+
+    <section class="page" id="view-examen" data-view="examen" hidden>
+      <div class="exam-shell">
+        <div class="exam-header">
+          <div><div class="exam-kicker">Evaluación diagnóstica</div><h2 class="exam-heading">Pon a prueba lo que sabes</h2><div class="progress-copy" id="exam-progress-copy">Pregunta 1 de 30 · 0 respondidas</div></div>
+          <button type="button" class="button button-outline" id="restart-exam">Nuevo examen</button>
+        </div>
+        <div class="progress-track" role="progressbar" aria-label="Progreso del examen" aria-valuemin="0" aria-valuemax="30" aria-valuenow="0"><div class="progress-fill" id="progress-fill"></div></div>
+        <div class="question-dots" id="question-dots" aria-label="Navegación de preguntas"></div>
+        <article class="exam-card" id="exam-card" aria-live="polite"></article>
+        <p class="exam-footnote">Son 30 preguntas sobre conceptos diferentes. Al elegir una opción recibirás retroalimentación inmediata.</p>
+      </div>
+    </section>
+
+    <section class="page" id="view-resultados" data-view="resultados" hidden>
+      <div class="exam-shell">
+        <div class="results-card" id="results-card"></div>
+        <div class="mistakes" id="mistakes"></div>
+      </div>
+    </section>
+  </main>
+  <footer class="footer">MEVAPREPA · Material de estudio del Módulo 11</footer>
+  <div class="toast" id="toast" role="status" hidden></div>
+
+  <script type="text/plain" id="concept-source">
+# Conceptos clave: Transformaciones en el mundo contemporáneo
+
+## Unidad 1. Guerras, revoluciones y transiciones políticas
+### Mundo bipolar y movimientos bélicos
+1. **Guerra Fría**: Rivalidad política, ideológica, económica y militar entre Estados Unidos y la Unión Soviética después de la Segunda Guerra Mundial. Se llamó “fría” porque las superpotencias evitaron enfrentarse directamente en una guerra total.
+2. **Mundo bipolar**: Orden internacional organizado principalmente alrededor de dos bloques encabezados por Estados Unidos y la Unión Soviética, cada uno con aliados e ideas políticas y económicas distintas.
+3. **Guerra de Vietnam**: Conflicto de 1961 a 1975 vinculado con la división del país y la Guerra Fría. Vietnam del Norte, de gobierno comunista, se enfrentó a Vietnam del Sur y a la intervención estadounidense; terminó con la reunificación bajo el gobierno del Norte.
+4. **Revolución China**: Proceso que llevó al Partido Comunista, dirigido por Mao Zedong, a fundar la República Popular China en 1949, tras una guerra civil y una prolongada lucha por el control del país.
+5. **Descolonización**: Proceso por el cual pueblos y territorios sometidos a potencias extranjeras obtuvieron independencia política. En África adoptó vías diversas, desde negociaciones hasta luchas armadas.
+6. **Apartheid**: Sistema institucional de segregación racial aplicado en Sudáfrica, que reservaba derechos y poder para la minoría blanca y discriminaba a la mayoría negra. Su resistencia interna e internacional contribuyó a su desmantelamiento.
+7. **Independencia de Angola**: Fin del dominio portugués en 1975, precedido por una lucha anticolonial. La disputa entre movimientos internos y la intervención de potencias externas contribuyeron a una prolongada guerra civil.
+8. **Revolución cubana**: Movimiento que derrocó a Fulgencio Batista en 1959. El gobierno revolucionario encabezado por Fidel Castro adoptó después un modelo socialista y una estrecha alianza con la Unión Soviética.
+9. **Revolución sandinista**: Triunfo en 1979 del Frente Sandinista de Liberación Nacional, que puso fin a la dictadura de la familia Somoza en Nicaragua y estableció un gobierno revolucionario.
+10. **Revolución egipcia de 1952**: Movimiento de oficiales que terminó con la monarquía y abrió paso a una república. Gamal Abdel Nasser se convirtió en su figura principal y promovió el nacionalismo árabe.
+### Transiciones políticas e ideológicas
+11. **Perestroika**: Política de reformas económicas impulsada por Mijaíl Gorbachov en la Unión Soviética durante la década de 1980; buscaba reestructurar un sistema que enfrentaba estancamiento y dificultades.
+12. **Glásnost**: Política de apertura y mayor transparencia pública promovida por Gorbachov. Permitió más debate sobre problemas políticos y sociales soviéticos.
+13. **Disolución de la Unión Soviética**: Proceso de crisis y fragmentación que culminó en 1991 con la desaparición de la URSS y la independencia de sus repúblicas; Rusia quedó como su principal Estado sucesor.
+14. **Transición mediterránea a la democracia**: Cambio de regímenes autoritarios a democráticos en España, Portugal y Grecia durante las décadas de 1970 y 1980, mediante procesos nacionales distintos.
+15. **Transiciones en Europa del Este**: Fin de regímenes socialistas de partido único y adopción de nuevos sistemas políticos. Polonia vivió una transición negociada y Checoslovaquia una transición conocida como “Revolución de Terciopelo”.
+16. **Transiciones de Asia y América Latina**: Procesos diversos de salida de gobiernos autoritarios en Taiwán y Corea del Sur, así como en Chile, Argentina y Brasil; combinaron movilización social, negociación y cambios institucionales.
+
+## Unidad 2. Desarrollo tecno-científico, creaciones culturales y movimientos sociales
+### Ciencia, tecnología y comunicación
+17. **ADN**: Molécula que almacena información hereditaria de los organismos. Su estructura y replicación permiten transmitir instrucciones biológicas entre generaciones.
+18. **Gen**: Segmento de ADN relacionado con una característica o función biológica. Las variantes heredadas y su interacción con el entorno contribuyen a las diferencias entre individuos.
+19. **Herencia genética**: Transmisión de información biológica de progenitores a descendientes mediante genes y cromosomas. La herencia explica semejanzas familiares, aunque no determina por sí sola todas las características.
+20. **Leyes de Mendel**: Principios derivados de experimentos con chícharos que describen patrones de transmisión de características. Ayudan a explicar por qué algunos rasgos pueden manifestarse y otros quedar ocultos en una generación.
+21. **Trasplante de órganos**: Procedimiento que reemplaza un órgano o tejido enfermo con otro donado. Su éxito depende, entre otros factores, de la compatibilidad y del control del rechazo inmunológico.
+22. **Rechazo inmunológico**: Respuesta defensiva del organismo que reconoce como extraño un órgano trasplantado y puede dañarlo. La compatibilidad y los medicamentos inmunosupresores ayudan a reducir este riesgo.
+23. **Radio**: Medio de comunicación que transmite sonido mediante ondas electromagnéticas. Su alcance y rapidez la convirtieron en un medio importante de información, entretenimiento y comunicación masiva.
+24. **Influencia de la radio**: Capacidad de la programación y la forma de transmitir información para moldear percepciones y reacciones colectivas; su impacto depende del contenido, la confianza y el contexto de la audiencia.
+25. **Televisión**: Medio audiovisual que combina imagen y sonido para informar, entretener y difundir ideas. Su presencia en los hogares amplió el acceso a acontecimientos y a contenidos culturales.
+26. **Internet**: Red mundial de redes que permite intercambiar información y comunicarse de manera interactiva. Facilita el acceso a contenidos, pero también exige evaluar su confiabilidad y considerar quién puede conectarse.
+27. **Brecha digital**: Desigualdad en el acceso, la calidad de conexión y las habilidades para usar tecnologías digitales. Puede limitar las oportunidades educativas, laborales y de participación.
+28. **Medios de comunicación**: Canales para producir y difundir información, entretenimiento e ideas. Pueden ser sonoros, impresos, audiovisuales o multimedia, y su influencia varía según sus propietarios, contenidos y públicos.
+### Movimientos culturales y expresiones artísticas
+29. **Movimientos juveniles y música**: Formas de expresión colectiva mediante las cuales jóvenes manifiestan identidad, valores o inconformidad. La música puede unir a un grupo y dar visibilidad a sus demandas.
+30. **Cine como expresión cultural**: Arte y medio audiovisual que representa experiencias e interpreta la realidad. Sus relatos pueden reflejar conflictos sociales y contribuir a la discusión pública.
+31. **Literatura y sociedad**: La literatura representa experiencias, ideas y tensiones de una época. Su análisis ayuda a reconocer distintas perspectivas y a cuestionar la realidad social.
+32. **Artes gráficas**: Expresiones visuales como la pintura y otras imágenes impresas que comunican ideas, valores y críticas mediante formas, colores y símbolos.
+33. **Historieta**: Narración que combina imágenes y texto en secuencia. Une recursos de las artes gráficas y de la literatura para contar historias y transmitir ideas.
+34. **Creación cultural**: Producción de expresiones y significados compartidos por una sociedad. La cultura cambia al interactuar con la tecnología, los medios y las experiencias colectivas.
+35. **Movimiento social**: Acción colectiva de personas que buscan defender derechos, cambiar una situación o influir en decisiones públicas. Puede expresarse mediante organizaciones, protestas y producción cultural.
+36. **Relación entre tecnología y cultura**: La tecnología modifica cómo se produce y circula la información, mientras que las necesidades y valores sociales influyen en los usos que se le dan.
+
+## Unidad 3. Crisis económicas y apertura comercial
+### Mercado e instituciones económicas
+37. **Mercado**: Espacio o mecanismo donde productores ofrecen bienes y servicios y consumidores deciden qué comprar según sus necesidades, ingresos y precios.
+38. **Oferta**: Cantidad de bienes o servicios que los productores están dispuestos a vender a diferentes precios. Puede cambiar por costos, tecnología, recursos disponibles o condiciones de producción.
+39. **Demanda**: Cantidad de bienes o servicios que los consumidores están dispuestos y pueden comprar a distintos precios, de acuerdo con sus necesidades e ingresos.
+40. **Equilibrio de mercado**: Situación en la que la cantidad que se ofrece coincide con la que se demanda; el precio correspondiente permite realizar las transacciones previstas por compradores y vendedores.
+41. **Crisis económica**: Desequilibrio que perturba el funcionamiento del mercado y afecta a productores, consumidores o ambos. Puede originarse en la oferta, la demanda o una combinación de factores, y manifestarse como crisis financiera, cambiaria, comercial o energética.
+42. **Instituciones económicas internacionales**: Organismos y acuerdos que influyen en las reglas, el financiamiento y la cooperación de la economía mundial. En la guía destacan el Fondo Monetario Internacional (FMI) y el Banco Mundial (BM), cuyas decisiones pueden afectar las políticas económicas de los países.
+43. **Economía mundial contemporánea**: Interdependencia entre países y mercados, intensificada desde el final del bloque socialista europeo, en la que comercio, capitales, tecnología y crisis cruzan fronteras.
+### Integración comercial y energía
+44. **Acuerdo de comercio preferencial (ACP)**: Acuerdo entre países para reducir o eliminar algunos obstáculos al comercio entre sus miembros. Ejemplos estudiados son el TLCAN, la Unión Europea y el acuerdo de libre comercio de la ASEAN; no implican necesariamente una unión económica completa.
+45. **Integración económica regional**: Cooperación entre economías de una región para facilitar el comercio y coordinar ciertas reglas. Los acuerdos y bloques pueden variar en alcance y profundidad.
+46. **Productividad**: Relación entre lo producido y los recursos empleados, como trabajo, tiempo o capital. Aumenta cuando se obtiene más producción con los mismos recursos o la misma producción con menos.
+47. **Competitividad comercial**: Capacidad de una economía o empresa para ofrecer productos y servicios que puedan competir en mercados internos o internacionales, atendiendo costos, calidad y productividad.
+48. **Renta petrolera**: Ingreso extraordinario asociado a la explotación de un recurso natural limitado cuando el precio de mercado supera los costos y la ganancia media. Su magnitud depende de las condiciones de oferta y demanda.
+49. **Bonanza petrolera**: Periodo de ingresos y crecimiento elevados para países exportadores cuando suben los precios del petróleo. La dependencia del recurso también puede hacerlos vulnerables a caídas posteriores de precios.
+### Crisis financieras, deuda y migración
+50. **Tasa de cambio**: Precio de una moneda expresado en otra. Sus variaciones afectan el costo de importaciones y deudas en moneda extranjera, así como el valor de los ingresos obtenidos por exportaciones.
+51. **Tasa de interés**: Costo de pedir dinero prestado o rendimiento de ahorrar. Influye en el crédito, la inversión y la capacidad de pagar deudas.
+52. **Burbuja especulativa japonesa de 1985-1991**: Aumento acelerado de los precios de acciones y bienes raíces, favorecido por crédito barato y expectativas de ganancias. Su estallido redujo el valor de esos activos y dejó deudas difíciles de pagar.
+53. **Crisis asiática de 1997-1998**: Crisis financiera regional asociada a vulnerabilidades de deuda externa, flujos de capital y tipos de cambio. La salida de capital y la presión sobre las monedas agravaron sus efectos económicos.
+54. **Deuda externa**: Obligaciones financieras de un país o sus agentes frente a acreedores de otros países. El pago puede volverse más difícil si cambian las tasas de interés o el valor de la moneda nacional.
+55. **Crisis de deuda europea**: Dificultades de pago y financiamiento que afectaron a países de la Unión Europea alrededor de 2010-2011. Mostraron la relación entre deuda pública, estabilidad financiera e integración monetaria.
+56. **Migración internacional**: Desplazamiento de personas de un país a otro para residir temporal o permanentemente. Puede relacionarse con empleo, ingresos, seguridad, redes familiares y otras condiciones.
+57. **Migración regular e irregular**: La migración regular se realiza conforme a las normas de entrada y estancia del país receptor; la irregular ocurre cuando se incumplen esas normas. Ambas describen situaciones administrativas, no el valor ni la dignidad de las personas.
+58. **Migración México-Estados Unidos**: Flujo influido por diferencias de empleo e ingresos, demanda laboral, vínculos familiares y condiciones económicas y sociales a ambos lados de la frontera.
+
+## Unidad 4. Perspectivas del mundo actual y nueva geopolítica
+### Potencias y cambios en el sistema internacional
+59. **Geopolítica contemporánea**: Estudio de cómo territorio, recursos, economía y poder político influyen en las relaciones entre Estados y en los conflictos internacionales.
+60. **Poder nacional**: Conjunto de capacidades que permiten a un país influir internacionalmente. Incluye geografía, recursos, industria, preparación militar, población, cohesión social y calidad de gobierno y diplomacia.
+61. **Potencia emergente**: País cuya influencia internacional aumenta gracias a cambios en capacidades económicas, productivas, demográficas o políticas. El crecimiento no garantiza por sí solo que desaparezcan sus desigualdades internas.
+62. **Japón como potencia**: Caso de un país que consolidó su influencia mediante desarrollo industrial, tecnología y capacidades financieras, aunque también enfrentó estancamiento y crisis económicas.
+63. **India como potencia emergente**: País cuya influencia se apoya, entre otros factores, en su población, actividad económica y participación internacional; sus capacidades coexisten con retos internos de desarrollo.
+64. **China como potencia emergente**: País que amplió su influencia con reformas económicas, expansión productiva e integración al comercio mundial, manteniendo un sistema político distinto al de las democracias liberales.
+65. **Brasil como potencia emergente**: País latinoamericano con territorio extenso, recursos y peso regional, cuyo potencial de influencia depende también del desempeño económico y de sus condiciones sociales.
+### Crisis y conflictos del siglo XXI
+66. **Ciclo económico**: Alternancia de periodos de expansión y contracción de la actividad económica. Las fluctuaciones de producción, empleo, crédito y demanda pueden generar crisis.
+67. **Crisis estadounidense**: Perturbación económica que afecta producción, empleo y finanzas en Estados Unidos; por su peso en el comercio y las finanzas, sus efectos pueden transmitirse a otras regiones.
+68. **Crisis latinoamericanas**: Episodios económicos de la región relacionados con factores internos y externos, como deuda, cambios en el comercio, precios internacionales y dependencia financiera.
+69. **Crisis española y eurozona**: Dificultades económicas y de deuda de España dentro de la Unión Europea, agravadas por la interdependencia financiera y las limitaciones de una moneda compartida.
+70. **Estado plurinacional**: Estado que reúne varios pueblos o comunidades con identidades nacionales, culturales o lingüísticas distintas. Las tensiones entre ellas pueden debilitar su unidad política.
+71. **Desintegración de Yugoslavia**: Fragmentación de un Estado plurinacional durante la década de 1990, acompañada por nacionalismos rivales, conflictos armados y la intervención de actores internacionales.
+72. **Terrorismo**: Uso de violencia o amenazas contra civiles para provocar temor e influir en decisiones políticas o sociales. Sus actores y objetivos varían; por eso es importante analizar cada contexto.
+73. **Fragmentación soviética y Rusia**: La disolución de la URSS en 1991 dio origen a varios Estados independientes y dejó a Rusia como su principal sucesora, con una posición internacional que cambió en las décadas posteriores.
+74. **Diáspora judía**: Dispersión de comunidades judías fuera de su territorio histórico. La historia de la diáspora forma parte del contexto del sionismo y de las disputas posteriores en Palestina.
+75. **Sionismo**: Movimiento surgido a finales del siglo XIX que promovió establecer un hogar nacional judío en Palestina. Su interacción con la población árabe y con decisiones de potencias extranjeras influyó en el conflicto posterior.
+76. **Conflicto Israel-Palestina**: Disputa histórica por territorio, autodeterminación y seguridad, marcada por decisiones internacionales, guerras y reclamos nacionales contrapuestos. Jerusalén tiene un significado central para las partes y para varias religiones.
+  </script>
+
+  <script type="text/plain" id="question-source">
+# Cuestionario: Transformaciones en el mundo contemporáneo
+
+## Unidad 1. Guerras, revoluciones y transiciones políticas
+### Mundo bipolar y movimientos bélicos
+1. ¿Qué fue la Guerra Fría? R_ Fue la rivalidad entre Estados Unidos y la Unión Soviética después de la Segunda Guerra Mundial. Aunque compitieron en muchos ámbitos y apoyaron a aliados, evitaron una guerra total directa entre ambas superpotencias.
+2. ¿Por qué se llama bipolar al orden internacional de la Guerra Fría? R_ Porque la mayor parte de la competencia mundial se organizó alrededor de dos polos: Estados Unidos y la Unión Soviética, junto con sus respectivos aliados.
+3. ¿Qué relación tuvo la Guerra de Vietnam con la Guerra Fría? R_ Vietnam quedó dividido entre un Norte comunista y un Sur anticomunista; Estados Unidos apoyó al Sur y el conflicto se convirtió en una guerra regional con implicaciones internacionales.
+4. ¿Cómo terminó la Guerra de Vietnam? R_ Terminó en 1975 con la victoria del Norte y la reunificación del país bajo su gobierno; la intervención también ocasionó grandes pérdidas humanas y costos políticos.
+5. ¿Qué cambio político produjo la Revolución China de 1949? R_ El triunfo comunista encabezado por Mao Zedong puso fin al gobierno nacionalista en el territorio continental y estableció la República Popular China.
+6. ¿Qué significa descolonización? R_ Es el proceso por el que territorios sometidos a una potencia extranjera consiguieron independencia política, mediante negociaciones, movimientos sociales o luchas armadas.
+7. ¿Qué fue el apartheid? R_ Un sistema sudafricano de segregación racial que concentraba derechos y poder en la minoría blanca y discriminaba a la mayoría negra.
+8. ¿Cómo se relacionan independencia y guerra civil en el caso de Angola? R_ Angola se independizó de Portugal en 1975 tras una lucha anticolonial, pero la disputa entre movimientos internos y la intervención extranjera contribuyeron a una guerra civil.
+9. ¿Qué ocurrió con la Revolución cubana de 1959? R_ Derrocó al gobierno de Fulgencio Batista y dio paso a un gobierno revolucionario que después adoptó el socialismo y se alió con la Unión Soviética.
+10. ¿Qué logró la Revolución sandinista en Nicaragua? R_ El Frente Sandinista de Liberación Nacional derrocó en 1979 a la dictadura de la familia Somoza y estableció un gobierno revolucionario.
+11. ¿Qué cambio de régimen impulsó la Revolución egipcia de 1952? R_ Un movimiento de oficiales puso fin a la monarquía y abrió paso a una república; Gamal Abdel Nasser fue su figura política más destacada.
+### Transiciones políticas e ideológicas
+12. ¿Qué buscaba la perestroika en la Unión Soviética? R_ Reestructurar la economía soviética mediante reformas, en un contexto de estancamiento y dificultades del sistema.
+13. ¿Qué promovía la glásnost? R_ Mayor apertura y transparencia en la vida pública, lo que permitió debatir problemas sociales y políticos de la Unión Soviética.
+14. ¿Qué sucedió con la URSS en 1991? R_ La Unión Soviética se disolvió y sus repúblicas se convirtieron en Estados independientes; Rusia quedó como su principal Estado sucesor.
+15. ¿Qué tuvieron en común las transiciones de España, Portugal y Grecia? R_ Las tres dejaron atrás regímenes autoritarios y avanzaron hacia sistemas democráticos, aunque cada país siguió su propio proceso.
+16. ¿Por qué se llama “Revolución de Terciopelo” al cambio checoslovaco? R_ Es el nombre de la transición política mayormente pacífica que puso fin al régimen socialista de partido único en Checoslovaquia.
+17. ¿Qué variedad de procesos políticos destaca la guía en Asia y América Latina? R_ En Taiwán, Corea del Sur, Chile, Argentina y Brasil hubo cambios desde gobiernos autoritarios hacia sistemas más democráticos, con combinaciones distintas de movilización y negociación.
+
+## Unidad 2. Desarrollo tecno-científico, creaciones culturales y movimientos sociales
+### Ciencia, tecnología y comunicación
+18. ¿Qué función cumple el ADN? R_ Almacena información hereditaria que participa en el funcionamiento de los organismos y puede transmitirse entre generaciones.
+19. ¿Qué es un gen? R_ Es un segmento de ADN relacionado con una característica o función biológica; sus variantes y el entorno contribuyen a las diferencias entre personas.
+20. ¿Cómo explica la herencia genética las semejanzas entre familiares? R_ Los progenitores transmiten información biológica mediante genes y cromosomas; por ello sus descendientes pueden compartir algunas características.
+21. ¿Qué aportaron los experimentos de Gregor Mendel al estudio de la herencia? R_ Mostraron patrones regulares en la transmisión de características y ayudaron a explicar cómo algunos rasgos se manifiestan mientras otros pueden quedar ocultos.
+22. ¿Qué es un trasplante de órganos? R_ Es un procedimiento que reemplaza un órgano o tejido enfermo con otro donado para recuperar una función del cuerpo.
+23. ¿Por qué puede ocurrir el rechazo de un órgano trasplantado? R_ El sistema inmunitario puede reconocerlo como extraño y atacarlo; la compatibilidad y los medicamentos inmunosupresores ayudan a reducir esa respuesta.
+24. ¿Cómo transmite información la radio? R_ Convierte sonidos en señales que se difunden por ondas electromagnéticas y pueden recibirse a distancia sin instalar un cable entre emisor y audiencia.
+25. ¿De qué depende la influencia social de un programa de radio? R_ Depende del contenido y su presentación, de la confianza de la audiencia y del contexto en que las personas reciben e interpretan el mensaje.
+26. ¿Qué distingue a la televisión de la radio? R_ La televisión combina imagen y sonido; la radio transmite principalmente sonido. Ambas informan y entretienen, pero ofrecen experiencias distintas.
+27. ¿Qué posibilidad de comunicación hizo más accesible Internet? R_ Permitió conectar redes y usuarios para intercambiar información de manera rápida e interactiva, además de ampliar el acceso a contenidos.
+28. ¿Qué es la brecha digital? R_ Es la desigualdad en acceso a Internet y dispositivos, calidad de conexión y habilidades para utilizarlos, que puede limitar oportunidades.
+29. ¿Qué tipos de medios de comunicación señala la guía? R_ Medios sonoros, impresos, audiovisuales y multimedia; por ejemplo, radio, libros, televisión e Internet.
+### Movimientos culturales y expresiones artísticas
+30. ¿Cómo puede la música expresar un movimiento juvenil? R_ Puede comunicar identidad, valores o inconformidad y servir para unir a jóvenes alrededor de experiencias o demandas compartidas.
+31. ¿Cómo puede el cine ayudar a interpretar una sociedad? R_ Sus historias representan experiencias y conflictos de una época, y pueden abrir conversaciones sobre problemas sociales.
+32. ¿Qué permite estudiar la literatura además de sus historias? R_ Permite identificar ideas, experiencias y tensiones sociales de una época, así como comparar perspectivas distintas.
+33. ¿Qué expresan las artes gráficas? R_ Comunican ideas, valores y críticas mediante imágenes, formas, colores y símbolos, como ocurre en la pintura.
+34. ¿Qué elementos combina una historieta? R_ Combina secuencias de imágenes y texto para narrar una historia; por eso vincula recursos gráficos y literarios.
+35. ¿Por qué la cultura no permanece fija? R_ Porque las sociedades reinterpretan sus experiencias y cambian sus formas de expresión, en interacción con nuevas tecnologías y circunstancias.
+36. ¿Cómo puede un movimiento social buscar cambios? R_ Mediante acción colectiva, organización, demandas públicas y otras formas de participación que intentan defender derechos o transformar una situación.
+37. ¿Cómo se influyen mutuamente tecnología y cultura? R_ La tecnología cambia cómo se crean y difunden mensajes, mientras que las necesidades y valores de la sociedad determinan cómo se usa.
+
+## Unidad 3. Crisis económicas y apertura comercial
+### Mercado e instituciones económicas
+38. ¿Qué ocurre en un mercado? R_ Productores ofrecen bienes o servicios y consumidores deciden qué comprar de acuerdo con sus necesidades, ingresos y los precios.
+39. ¿Qué significa oferta en economía? R_ Es la cantidad de bienes o servicios que los productores están dispuestos a vender a distintos precios; depende de factores como costos y condiciones de producción.
+40. ¿Qué significa demanda? R_ Es la cantidad de bienes o servicios que los consumidores están dispuestos y pueden comprar según sus necesidades, ingresos y precios.
+41. ¿Cuándo se encuentra un mercado en equilibrio? R_ Cuando la cantidad ofrecida coincide con la cantidad demandada, formando un precio al que compradores y vendedores pueden realizar sus intercambios.
+42. ¿Cómo define la guía una crisis económica? R_ Como un desequilibrio que perturba el mercado y afecta a productores o consumidores; puede originarse en la oferta, la demanda o ambas y adoptar distintas formas.
+43. ¿Qué papel pueden tener instituciones como el FMI y el Banco Mundial? R_ Influyen en el financiamiento y en las condiciones económicas internacionales; sus decisiones y recomendaciones pueden afectar las políticas de los países.
+44. ¿Qué caracteriza a la economía mundial contemporánea estudiada en la unidad? R_ La interdependencia de países y mercados, intensificada tras la desaparición del bloque socialista europeo, con flujos transfronterizos de comercio, capital y tecnología.
+### Integración comercial y energía
+45. ¿Qué ejemplos de acuerdos o bloques comerciales estudia la unidad? R_ El TLCAN, la Unión Europea y el acuerdo de libre comercio de la ASEAN ilustran distintas formas de cooperación comercial e integración regional.
+46. ¿Qué busca la integración económica regional? R_ Facilitar el comercio entre países de una región y coordinar algunas reglas; el nivel de integración depende de cada acuerdo.
+47. ¿Cómo se mide la productividad? R_ Comparando lo producido con los recursos utilizados, como trabajo, tiempo o capital. Es mayor si se produce más con los mismos recursos.
+48. ¿Qué significa competitividad comercial? R_ Es la capacidad de competir en un mercado ofreciendo bienes o servicios en condiciones atractivas de costo, calidad y productividad.
+49. ¿Cómo se genera la renta petrolera? R_ Puede aparecer como ingreso extraordinario cuando el precio de un recurso naturalmente limitado supera los costos de producción y la ganancia media.
+50. ¿Por qué una bonanza petrolera puede ser riesgosa para un país exportador? R_ El alza de precios puede elevar ingresos y crecimiento, pero depender mucho del petróleo deja al país expuesto a la inestabilidad y a caídas de precios.
+### Crisis financieras, deuda y migración
+51. ¿Qué es la tasa de cambio? R_ Es el precio de una moneda en términos de otra. Sus variaciones modifican el costo de bienes importados y deudas en moneda extranjera.
+52. ¿Cómo influye la tasa de interés en la economía? R_ Cambia el costo del crédito y el rendimiento del ahorro, por lo que influye en la inversión y en la capacidad de pagar deudas.
+53. ¿Qué ocurrió con la burbuja especulativa japonesa de 1985-1991? R_ El crédito barato impulsó al alza las acciones y los bienes raíces; al revertirse el auge, cayeron los precios y muchas empresas y personas quedaron con deudas difíciles de cubrir.
+54. ¿Qué factores se asociaron con la crisis asiática de 1997-1998? R_ Vulnerabilidades de deuda externa, flujos de capital y tipos de cambio; la salida de capital presionó las monedas y agravó los problemas económicos.
+55. ¿Por qué puede volverse difícil pagar una deuda externa? R_ Porque cambios en las tasas de interés o en el valor de la moneda nacional pueden elevar el costo de las obligaciones contraídas en el extranjero.
+56. ¿Qué mostró la crisis de deuda europea de 2010-2011? R_ Que las dificultades de financiamiento de algunos países podían afectar la estabilidad financiera de la Unión Europea debido a la interdependencia y la moneda compartida.
+57. ¿Qué es la migración internacional? R_ Es el desplazamiento de personas de un país a otro para vivir temporal o permanentemente, por razones que pueden incluir trabajo, seguridad y vínculos familiares.
+58. ¿En qué se diferencian migración regular e irregular? R_ La regular cumple las normas de entrada y estancia del país receptor; la irregular no cumple alguna de esas normas. La diferencia es administrativa.
+59. ¿Qué factores ayudan a explicar la migración entre México y Estados Unidos? R_ Diferencias de empleo e ingresos, demanda laboral, redes familiares y condiciones económicas y sociales de ambos países.
+
+## Unidad 4. Perspectivas del mundo actual y nueva geopolítica
+### Potencias y cambios en el sistema internacional
+60. ¿Qué estudia la geopolítica? R_ Analiza cómo el territorio, los recursos, la economía y el poder político influyen en las relaciones entre países y en los conflictos.
+61. ¿Qué capacidades forman el poder nacional de un país? R_ Incluyen geografía, recursos, industria, preparación militar, población, cohesión social, calidad del gobierno y diplomacia; no depende solo de la fuerza armada.
+62. ¿Qué hace que un país sea considerado una potencia emergente? R_ Que aumente su influencia internacional apoyado por capacidades económicas, productivas, demográficas o políticas; esto no elimina automáticamente sus desigualdades internas.
+63. ¿Qué factores contribuyeron a la influencia internacional de Japón? R_ Su desarrollo industrial, tecnológico y financiero, aunque también enfrentó estancamiento y crisis económicas.
+64. ¿Qué capacidades y retos se destacan al estudiar a India? R_ Su población, actividad económica y participación internacional amplían su peso, mientras persisten retos internos de desarrollo.
+65. ¿Qué cambios fortalecieron la presencia internacional de China? R_ Las reformas económicas, la expansión de su producción y su integración al comercio mundial, junto con un sistema político diferente al de las democracias liberales.
+66. ¿Qué elementos explican el potencial de Brasil como potencia emergente? R_ Su territorio, recursos y peso regional; su influencia también depende del desempeño económico y de sus condiciones sociales.
+### Crisis y conflictos del siglo XXI
+67. ¿Qué es un ciclo económico? R_ Es la alternancia de expansión y contracción de la actividad económica, con cambios en producción, empleo, crédito y demanda.
+68. ¿Por qué una crisis en Estados Unidos puede afectar a otros países? R_ Por el peso estadounidense en el comercio y las finanzas internacionales, que transmite efectos a economías conectadas con esos mercados.
+69. ¿Qué factores pueden contribuir a las crisis de América Latina? R_ Factores internos y externos como deuda, cambios comerciales, precios internacionales y dependencia del financiamiento.
+70. ¿Por qué las dificultades de España repercutieron en otros países europeos? R_ Porque España forma parte de una economía y una moneda compartidas, donde las relaciones financieras conectan a los Estados miembros.
+71. ¿Qué caracteriza a un Estado plurinacional? R_ Que reúne pueblos o comunidades con identidades nacionales, culturales o lingüísticas distintas dentro de un mismo Estado.
+72. ¿Qué factores se relacionaron con la desintegración de Yugoslavia? R_ La rivalidad de nacionalismos dentro de un Estado plurinacional, los conflictos armados y la intervención de actores internacionales.
+73. ¿Por qué el terrorismo puede tener “muchos fines”? R_ Porque distintos actores recurren a la violencia o a la amenaza para causar temor e influir en decisiones políticas o sociales por motivos diferentes.
+74. ¿Qué consecuencias tuvo la disolución de la Unión Soviética? R_ En 1991 surgieron varios Estados independientes y Rusia quedó como su principal sucesora, con una influencia internacional que cambió con el tiempo.
+75. ¿Qué proponía el sionismo y cómo se relaciona con la diáspora judía? R_ El sionismo, surgido a finales del siglo XIX, promovió establecer un hogar nacional judío en Palestina; la diáspora forma parte del contexto histórico de ese movimiento.
+76. ¿Qué elementos centrales mantienen el conflicto Israel-Palestina? R_ Disputas por territorio, autodeterminación y seguridad, junto con decisiones internacionales y reclamos nacionales contrapuestos; Jerusalén es central para las partes y varias religiones.
+  </script>
+
+  <script>
+    (() => {
+      "use strict";
+
+      const EXAM_SIZE = 30;
+      const LETTERS = ["A", "B", "C", "D"];
+      const units = new Map();
+      const concepts = parseConcepts(document.getElementById("concept-source").textContent);
+      const quizQuestions = parseQuestions(document.getElementById("question-source").textContent);
+      let activeView = "inicio";
+      let exam = [];
+      let currentIndex = 0;
+      let submitted = false;
+      let toastTimer;
+
+      function parseConcepts(source) {
+        let unitNumber = 0;
+        let unitName = "";
+        let topic = "";
+        const result = [];
+        for (const rawLine of source.split(/\r?\n/)) {
+          const line = rawLine.trim();
+          const unitMatch = line.match(/^## Unidad (\d+)\.\s*(.+)$/);
+          if (unitMatch) {
+            unitNumber = Number(unitMatch[1]);
+            unitName = unitMatch[2];
+            if (!units.has(unitNumber)) units.set(unitNumber, unitName);
+            continue;
+          }
+          const topicMatch = line.match(/^###\s+(.+)$/);
+          if (topicMatch) {
+            topic = topicMatch[1];
+            continue;
+          }
+          const conceptMatch = line.match(/^\d+\.\s+\*\*(.+?)\*\*:\s*(.+)$/);
+          if (conceptMatch) {
+            result.push({
+              id: result.length + 1,
+              name: conceptMatch[1],
+              definition: conceptMatch[2],
+              unit: unitNumber,
+              unitName,
+              topic
+            });
+          }
+        }
+        return result;
+      }
+
+      function parseQuestions(source) {
+        let unitNumber = 0;
+        let unitName = "";
+        const result = [];
+        for (const rawLine of source.split(/\r?\n/)) {
+          const line = rawLine.trim();
+          const unitMatch = line.match(/^## Unidad (\d+)\.\s*(.+)$/);
+          if (unitMatch) {
+            unitNumber = Number(unitMatch[1]);
+            unitName = unitMatch[2];
+            continue;
+          }
+          const questionMatch = line.match(/^\d+\.\s*(.+?)\s+R_\s+(.+)$/);
+          if (questionMatch) {
+            result.push({
+              number: result.length + 1,
+              question: questionMatch[1].trim(),
+              answer: questionMatch[2].trim(),
+              unit: unitNumber,
+              unitName
+            });
+          }
+        }
+        return result;
+      }
+
+      function normalize(value) {
+        return value.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+      }
+
+      function escapeHtml(value) {
+        return String(value).replace(/[&<>"']/g, (character) => ({
+          "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+        })[character]);
+      }
+
+      function shuffle(values) {
+        const result = [...values];
+        for (let index = result.length - 1; index > 0; index -= 1) {
+          const target = Math.floor(Math.random() * (index + 1));
+          [result[index], result[target]] = [result[target], result[index]];
+        }
+        return result;
+      }
+
+      function showToast(message) {
+        const toast = document.getElementById("toast");
+        toast.textContent = message;
+        toast.hidden = false;
+        window.clearTimeout(toastTimer);
+        toastTimer = window.setTimeout(() => { toast.hidden = true; }, 3300);
+      }
+
+      function populateUnitFilters() {
+        for (const selectId of ["concept-unit", "question-unit"]) {
+          const select = document.getElementById(selectId);
+          for (const [number, name] of units) {
+            const option = document.createElement("option");
+            option.value = String(number);
+            option.textContent = `Unidad ${number} · ${name}`;
+            select.append(option);
+          }
+        }
+      }
+
+      function renderConcepts() {
+        const search = normalize(document.getElementById("concept-search").value.trim());
+        const unit = document.getElementById("concept-unit").value;
+        const filtered = concepts.filter((item) => {
+          const matchesSearch = !search || normalize(`${item.name} ${item.definition} ${item.topic}`).includes(search);
+          return matchesSearch && (unit === "all" || String(item.unit) === unit);
+        });
+        const count = document.getElementById("concept-count");
+        count.textContent = `${filtered.length} ${filtered.length === 1 ? "concepto" : "conceptos"}`;
+        if (!filtered.length) {
+          document.getElementById("concepts-list").innerHTML = '<div class="empty-state">No encontramos conceptos con esos filtros. Prueba otra búsqueda.</div>';
+          return;
+        }
+        const grouped = new Map();
+        for (const item of filtered) {
+          const key = `${item.unit}|${item.topic}`;
+          if (!grouped.has(key)) grouped.set(key, { unit: item.unit, unitName: item.unitName, topic: item.topic, items: [] });
+          grouped.get(key).items.push(item);
+        }
+        const unitGroups = new Map();
+        for (const group of grouped.values()) {
+          if (!unitGroups.has(group.unit)) unitGroups.set(group.unit, { name: group.unitName, topics: [] });
+          unitGroups.get(group.unit).topics.push(group);
+        }
+        const html = [...unitGroups.entries()].map(([number, unitGroup]) => `
+          <section class="unit-section">
+            <h3 class="unit-title"><span>${number}</span> Unidad ${number}. ${escapeHtml(unitGroup.name)}</h3>
+            ${unitGroup.topics.map((group) => `
+              <div class="topic-group">
+                <h4 class="topic-heading">${escapeHtml(group.topic)}</h4>
+                <div class="concept-grid">
+                  ${group.items.map((item) => `
+                    <article class="concept-card">
+                      <span class="concept-index">${String(item.id).padStart(2, "0")}</span>
+                      <div><h5 class="concept-name">${escapeHtml(item.name)}</h5><p class="concept-definition">${escapeHtml(item.definition)}</p></div>
+                    </article>
+                  `).join("")}
+                </div>
+              </div>
+            `).join("")}
+          </section>
+        `).join("");
+        document.getElementById("concepts-list").innerHTML = html;
+      }
+
+      function renderQuestions() {
+        const search = normalize(document.getElementById("question-search").value.trim());
+        const unit = document.getElementById("question-unit").value;
+        const filtered = quizQuestions.filter((item) => {
+          const matchesSearch = !search || normalize(`${item.question} ${item.answer}`).includes(search);
+          return matchesSearch && (unit === "all" || String(item.unit) === unit);
+        });
+        document.getElementById("question-count").textContent = `${filtered.length} ${filtered.length === 1 ? "pregunta" : "preguntas"}`;
+        document.getElementById("question-summary").textContent = filtered.length
+          ? `Mostrando ${filtered.length} preguntas. Las respuestas permanecen ocultas hasta que las reveles.`
+          : "No encontramos preguntas con esos filtros.";
+        document.getElementById("questions-list").innerHTML = filtered.map((item) => `
+          <article class="question-card">
+            <div class="question-top"><span class="question-number">${String(item.number).padStart(2, "0")}</span><p class="question-text">${escapeHtml(item.question)}</p></div>
+            <button class="answer-toggle" type="button" aria-expanded="false" aria-controls="answer-${item.number}" data-answer="${item.number}">Mostrar respuesta</button>
+            <div class="answer-copy" id="answer-${item.number}" hidden>${escapeHtml(item.answer)}</div>
+          </article>
+        `).join("");
+      }
+
+      function makeExamQuestion(concept) {
+        const siblings = concepts.filter((candidate) => candidate.topic === concept.topic && candidate.id !== concept.id);
+        const distractors = shuffle(siblings).slice(0, 3).map((item) => item.name);
+        const options = shuffle([concept.name, ...distractors]);
+        const phrasing = Math.floor(Math.random() * 3);
+        const definition = concept.definition;
+        const prompts = [
+          `¿Qué concepto se define por esta idea? ${definition}`,
+          `Identifica el término que corresponde a la explicación: ${definition}`,
+          `¿A cuál de estos conceptos se refiere la descripción? ${definition}`
+        ];
+        return {
+          conceptId: concept.id,
+          conceptName: concept.name,
+          definition,
+          unit: concept.unit,
+          unitName: concept.unitName,
+          topic: concept.topic,
+          prompt: prompts[phrasing],
+          options,
+          correctIndex: options.indexOf(concept.name),
+          selectedIndex: null
+        };
+      }
+
+      function createExam() {
+        if (concepts.length < EXAM_SIZE) {
+          showToast(`Se necesitan al menos ${EXAM_SIZE} conceptos para generar el examen.`);
+          return false;
+        }
+        exam = shuffle(concepts).slice(0, EXAM_SIZE).map(makeExamQuestion);
+        currentIndex = 0;
+        submitted = false;
+        renderExam();
+        return true;
+      }
+
+      function renderDots() {
+        document.getElementById("question-dots").innerHTML = exam.map((item, index) => {
+          const classes = ["question-dot"];
+          if (item.selectedIndex !== null) classes.push(index === currentIndex ? "is-current-answered" : "is-answered");
+          return `<button type="button" class="${classes.join(" ")}" data-question-index="${index}" aria-label="Ir a la pregunta ${index + 1}" ${index === currentIndex ? 'aria-current="step"' : ""}>${index + 1}</button>`;
+        }).join("");
+      }
+
+      function renderExam() {
+        if (!exam.length) return;
+        const answered = exam.filter((item) => item.selectedIndex !== null).length;
+        const current = exam[currentIndex];
+        const progress = document.querySelector('[role="progressbar"]');
+        progress.setAttribute("aria-valuenow", String(answered));
+        document.getElementById("progress-fill").style.width = `${(answered / EXAM_SIZE) * 100}%`;
+        document.getElementById("exam-progress-copy").textContent = `Pregunta ${currentIndex + 1} de ${EXAM_SIZE} · ${answered} respondidas`;
+        renderDots();
+        const selected = current.selectedIndex;
+        const choices = current.options.map((option, index) => {
+          let stateClass = "";
+          let mark = "";
+          if (selected !== null && index === current.correctIndex) { stateClass = "is-correct"; mark = "✓"; }
+          else if (selected !== null && index === selected) { stateClass = "is-wrong"; mark = "✗"; }
+          return `
+            <button type="button" class="option ${stateClass}" data-option-index="${index}" ${selected !== null ? "disabled" : ""}>
+              <span class="option-letter">${LETTERS[index]}</span><span class="option-copy">${escapeHtml(option)}</span><span class="option-mark" aria-hidden="true">${mark}</span>
+            </button>
+          `;
+        }).join("");
+        const feedback = selected === null
+          ? "Elige la opción que mejor representa la idea."
+          : selected === current.correctIndex
+            ? `¡Correcto! ${escapeHtml(current.conceptName)}: ${escapeHtml(current.definition)}`
+            : `No es esa. La respuesta correcta es <strong>${escapeHtml(current.conceptName)}</strong>. ${escapeHtml(current.definition)}`;
+        const feedbackClass = selected === null ? "" : selected === current.correctIndex ? "good" : "bad";
+        const previousDisabled = currentIndex === 0;
+        const isLast = currentIndex === EXAM_SIZE - 1;
+        const canSubmit = exam.every((item) => item.selectedIndex !== null);
+        document.getElementById("exam-card").innerHTML = `
+          <div class="exam-card-meta"><span class="exam-unit">Unidad ${current.unit} · ${escapeHtml(current.unitName)}</span><span class="exam-topic">${escapeHtml(current.topic)}</span></div>
+          <p class="exam-prompt">${escapeHtml(current.prompt)}</p>
+          <div class="option-list">${choices}</div>
+          <div class="answer-feedback ${feedbackClass}" role="status">${feedback}</div>
+          <div class="exam-controls">
+            <button type="button" class="button button-outline" data-exam-nav="previous" ${previousDisabled ? "disabled" : ""}>← Anterior</button>
+            ${isLast
+              ? `<button type="button" class="button button-dark" id="submit-exam" ${canSubmit ? "" : "disabled"}>Entregar examen <span class="arrow" aria-hidden="true">→</span></button>`
+              : `<button type="button" class="button button-dark" data-exam-nav="next">Siguiente <span class="arrow" aria-hidden="true">→</span></button>`}
+          </div>
+          ${isLast && !canSubmit ? '<p class="exam-footnote">Responde todas las preguntas para entregar el examen.</p>' : ""}
+        `;
+        document.getElementById("exam-card").querySelectorAll(".button:disabled").forEach((button) => {
+          button.style.opacity = ".48";
+          button.style.cursor = "not-allowed";
+        });
+      }
+
+      function showResults() {
+        const score = exam.reduce((total, item) => total + (item.selectedIndex === item.correctIndex ? 1 : 0), 0);
+        const grade = (score / EXAM_SIZE * 10).toFixed(1);
+        const missed = exam.filter((item) => item.selectedIndex !== item.correctIndex);
+        document.getElementById("results-card").innerHTML = `
+          <span class="eyebrow" style="color:var(--lime)">Resultado del diagnóstico</span>
+          <div class="result-number">${score}/${EXAM_SIZE}</div>
+          <div class="result-grade">Calificación: <strong>${grade}</strong> / 10</div>
+          <p class="result-note">${score === EXAM_SIZE ? "Dominio excelente: conectaste con precisión los conceptos del módulo." : score >= 21 ? "Buen avance. Revisa los temas que te hicieron dudar y vuelve a practicar." : "Este resultado te da un mapa de estudio. Repasa los conceptos señalados y prueba otro examen."}</p>
+          <div class="result-actions">
+            <button type="button" class="button button-primary" data-route="examen">Hacer otro examen <span class="arrow" aria-hidden="true">→</span></button>
+            <button type="button" class="button button-secondary" data-route="conceptos">Volver a conceptos</button>
+          </div>
+        `;
+        document.getElementById("mistakes").innerHTML = missed.length
+          ? `<h3>Conceptos para repasar</h3>${missed.map((item) => `<article class="mistake-item"><strong>${escapeHtml(item.conceptName)}</strong><span>${escapeHtml(item.definition)}</span></article>`).join("")}`
+          : '<p class="home-note"><span class="note-mark" aria-hidden="true">✓</span><span>No hay conceptos incorrectos para repasar en este intento.</span></p>';
+        submitted = true;
+        showView("resultados");
+      }
+
+      function showView(name) {
+        if (!document.getElementById(`view-${name}`)) return;
+        activeView = name;
+        document.querySelectorAll("[data-view]").forEach((section) => { section.hidden = section.dataset.view !== name; });
+        document.querySelectorAll(".nav [data-route]").forEach((button) => {
+          const current = (name === "resultados" && button.dataset.route === "examen") || button.dataset.route === name;
+          if (current) button.setAttribute("aria-current", "page");
+          else button.removeAttribute("aria-current");
+        });
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+
+      function navigate(name, freshExam = false) {
+        if (name === "examen" && (freshExam || !exam.length || submitted)) {
+          if (!createExam()) return;
+        }
+        showView(name);
+        const hash = name === "inicio" ? "#inicio" : `#${name}`;
+        if (window.location.hash !== hash) history.replaceState(null, "", hash);
+      }
+
+      document.getElementById("hero-concept-count").textContent = String(concepts.length);
+      document.getElementById("concept-count").textContent = `${concepts.length} conceptos`;
+      document.getElementById("question-count").textContent = `${quizQuestions.length} preguntas`;
+      populateUnitFilters();
+      renderConcepts();
+      renderQuestions();
+
+      document.addEventListener("click", (event) => {
+        const routeButton = event.target.closest("[data-route]");
+        if (routeButton) {
+          navigate(routeButton.dataset.route, routeButton.dataset.route === "examen");
+          return;
+        }
+        const answerButton = event.target.closest("[data-answer]");
+        if (answerButton) {
+          const answer = document.getElementById(`answer-${answerButton.dataset.answer}`);
+          const willOpen = answer.hidden;
+          answer.hidden = !willOpen;
+          answerButton.setAttribute("aria-expanded", String(willOpen));
+          answerButton.textContent = willOpen ? "Ocultar respuesta" : "Mostrar respuesta";
+          return;
+        }
+        const dot = event.target.closest("[data-question-index]");
+        if (dot) {
+          currentIndex = Number(dot.dataset.questionIndex);
+          renderExam();
+          return;
+        }
+        const option = event.target.closest("[data-option-index]");
+        if (option && activeView === "examen" && !submitted) {
+          const current = exam[currentIndex];
+          if (current.selectedIndex === null) {
+            current.selectedIndex = Number(option.dataset.optionIndex);
+            renderExam();
+          }
+          return;
+        }
+        const examNav = event.target.closest("[data-exam-nav]");
+        if (examNav) {
+          currentIndex += examNav.dataset.examNav === "next" ? 1 : -1;
+          currentIndex = Math.max(0, Math.min(EXAM_SIZE - 1, currentIndex));
+          renderExam();
+          return;
+        }
+        if (event.target.closest("#submit-exam")) {
+          if (exam.every((item) => item.selectedIndex !== null)) showResults();
+          else showToast("Responde las 30 preguntas antes de entregar.");
+        }
+        if (event.target.closest("#restart-exam")) navigate("examen", true);
+      });
+
+      document.getElementById("concept-search").addEventListener("input", renderConcepts);
+      document.getElementById("concept-unit").addEventListener("change", renderConcepts);
+      document.getElementById("question-search").addEventListener("input", renderQuestions);
+      document.getElementById("question-unit").addEventListener("change", renderQuestions);
+
+      window.addEventListener("hashchange", () => {
+        const route = window.location.hash.slice(1);
+        if (route === "examen") {
+          createExam();
+          showView("examen");
+        } else if (["inicio", "conceptos", "cuestionario"].includes(route)) {
+          showView(route);
+        }
+      });
+
+      const initialRoute = window.location.hash.slice(1);
+      if (initialRoute === "examen") {
+        createExam();
+        showView("examen");
+      } else if (["conceptos", "cuestionario"].includes(initialRoute)) {
+        showView(initialRoute);
+      } else {
+        showView("inicio");
+      }
+    })();
+  </script>
+</body>
+</html>
